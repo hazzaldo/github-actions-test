@@ -14,7 +14,7 @@ jobs:
     # Define the steps (an array of objects - where each object represents a step)
     steps:
       # The name of the step - in this case it's called "echo a string". The second element of this object is a shell command to echo a string
-      - name: echo a string
+      - name: eccho a string
         # The second element of this object is a shell command to echo a string. By default Ubuntu (& MacOS) will have a bash shell. Windows has a Power Shell. So for Ubuntu ensure you write shell commands
         run: echo "Hello World"
       # We add one more step 

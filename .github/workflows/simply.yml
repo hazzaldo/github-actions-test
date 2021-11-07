@@ -1,25 +1,25 @@
-# name of workflow
+# Name of workflow
 name: Shell Commands
 
-# define events that would trigger this workflow
+# Define events that would trigger this workflow
 on: [push]
 
-# define the jobs that get triggered (jobs as an object, with keys in the object being the names of the jobs). 
+# Define the jobs that get triggered (jobs as an object, with keys in the object being the names of the jobs). 
 # You can have dashes or underscores for the key names (i.e. jobs' names), but no spaces.
 jobs:
-  # the value for this key (job) is an object, hence the new lone of key-value pairs
+  # The value for this key (job) is an object, hence the new lone of key-value pairs
   run-shell-command:
-    # define the OS VM to run the job on
+    # Define the OS VM to run the job on
     runs-on: ubuntu-latest
-    # define the steps (an array of objects - where each object represents a step)
+    # Define the steps (an array of objects - where each object represents a step)
     steps:
-      # the name of the step - in this case it's called "echo a string". The second element of this object is a shell command to echo a string
+      # The name of the step - in this case it's called "echo a string". The second element of this object is a shell command to echo a string
       - name: echo a string
         # The second element of this object is a shell command to echo a string. By default Ubuntu (& MacOS) will have a bash shell. Windows has a Power Shell. So for Ubuntu ensure you write shell commands
         run: echo "Hello World"
-      # we add one more step 
+      # We add one more step 
       - name: multiline script
-        # the Pipe symbol can allow for multiple commands to run in the same step
+        # The Pipe symbol can allow for multiple commands to run in the same step
           # Step 1: run Node version
           # Step 2: run NPM version
         run: |

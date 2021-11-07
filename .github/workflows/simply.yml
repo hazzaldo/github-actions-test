@@ -32,7 +32,19 @@ jobs:
           import platform
           print(platform.processor())
         shell: python
-
+  # Another job - this one will run on a Windows VM (in parallel to the previous job)
+  run-windows-commands:
+    runs-on: windows-latest
+    steps:
+      # If you do not specify the shell specifically, it will run on PowerShell by default as it is Windows
+      - name: PrintOut Current Directory (PowerShell)
+        # This command will print out the current directory. 'Get-Location' is a PowerShell specific command. In bash we use 'pwd' instead to print out current directory. 
+        run: Get-Location
+      # This step does exactly the same as the previous step (i.e. print out current directory), however we use the bash shell, hence the command is 'pwd'.
+      - name: PrintOut Current Directory (Bash)
+        run: pwd
+        # note we have to explicitly specify shell as bash, otherwise it will default to PowerShell and will throw an error, as pwd is not recognized by PowerShell
+        shell: bash
 
 
 

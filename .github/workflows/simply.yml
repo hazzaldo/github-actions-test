@@ -16,7 +16,7 @@ jobs:
       # The name of the step - in this case it's called "echo a string". The second element of this object is a shell command to echo a string
       - name: echo a string
         # The second element of this object is a shell command to echo a string. By default Ubuntu (& MacOS) will have a bash shell. Windows has a Power Shell. So for Ubuntu ensure you write shell commands
-        run: eccho "Hello World"
+        run: echo "Hello World"
       # We add one more step 
       - name: multiline script
         # The Pipe symbol can allow for multiple commands to run in the same step

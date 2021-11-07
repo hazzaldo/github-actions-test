@@ -35,6 +35,8 @@ jobs:
   # Another job - this one will run on a Windows VM (in parallel to the previous job)
   run-windows-commands:
     runs-on: windows-latest
+    # If you wish to make this job run only after another job has completed, use the 'needs' key below, with the name of the job(s) as the value(s).
+    needs: ["run-shell-command"]
     steps:
       # If you do not specify the shell specifically, it will run on PowerShell by default as it is Windows
       - name: PrintOut Current Directory (PowerShell)

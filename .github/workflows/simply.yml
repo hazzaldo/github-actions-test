@@ -24,7 +24,15 @@ jobs:
           # Step 2: run NPM version
         run: |
           node -v 
-          npm -v 
+          npm -v
+        # This step runs python script. GitHub Actions has Python shell (runtime) installed
+      - name: python commands
+        # python script to print the processor info of the machine the workflow will run on
+        run: |
+          import platform
+          print(platform.processor())
+        shell: python
+
 
 
 

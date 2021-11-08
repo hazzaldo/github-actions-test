@@ -1,0 +1,23 @@
+name: Actions Workflow
+
+on: [push]
+
+jobs:
+  run-github-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simple JS Action
+        # if you want this step to be referenced in another step, you need to give it an ID
+        id: greet
+        # instead of 'run' for shell commands use the 'uses' keyword for Actions. We're referencing an action from a Github repo (username 'actions' and repo name 'hello-world-javascript-action'). We also have to specify either which branch or which version. In this case we referenced the latest version 1.1
+        uses: actions/hello-world-javascript-action@v1.1
+        with:
+          who-to-greet: Hareth
+      # the above step is to pass an input. Now we need to output the result of our Action
+      - name: Log Greeting Time
+        # in order to output the result of the previous step, we need to reference the previous step, with $ and double curly brackets with 'steps' (a variable that GitHub provide us to be able to reference any of the steps in the job, using their IDs)
+        # as you can see here we referenced the ID of the previous step ('greet') followed by the keyword 'outputs' and the name of the output is 'time' to get the output of the previous step action. 
+        # We were able to know how to access the output of the previous step using 'outputs.time' because it's mentioned in the documentation of the GitHub repo 'https://github.com/actions/hello-world-javascript-action', which is the repo we're using for our previous step action.
+        # Always refer to the documentation of the GitHub Action you're referencing to know how to use the Action.
+        run: echo "${{ steps.greet.outputs.time }}" 
+

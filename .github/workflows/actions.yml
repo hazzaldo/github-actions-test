@@ -1,7 +1,17 @@
 name: Actions Workflow
 
 on:
-  push:
+  # push:
+
+  # this is a scheduled type job
+  schedule:
+    # the value of the key 'cron' is a crone expression, which consists of 5 things:
+      # minutes, hours, day of a month, the month, day of the week.
+      # An asterisk means any value - so if all values are asterisks, means minute, any hour, any day of the month ... etc. Means we run the crone job every minute of every hour of every day ...etc. Meaning every minute
+      # This lesson will help clarify things: https://www.udemy.com/course/github-actions/learn/lecture/17385632#overview   
+    - cron: "0/5 * * * *"
+    # you can have the cron jobs run again at different time frequency in this case every 6 min
+    - cron: "0/6 * * * *"
   pull_request:
     types: [closed, assigned, opened, reopened]
 

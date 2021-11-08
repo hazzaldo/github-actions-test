@@ -7,9 +7,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: List Files
-        run:
+        run: |
           pwd
-          ls
+          ls -a
+      - name: Checkout
+        # This action will authenticate with your repository, fetch your repo code and checkout the commit that triggered this workflow run
+        # We need to pull/clone the code of commit that triggered the workflow into the VM where the job is running 
+        # We could've also used normal Git commands to achieve this (as Git is installed on GitHub Action VMs), but this action abstract this for us
+        uses: actions/checkout@v2.4.0
+      # Now we use this job to list the files in the current directory to see if our repo clone has worked
+      - name: List Files After Checkout
+        run: |
+          pwd
+          ls -a
       - name: Simple JS Action
         # if you want this step to be referenced in another step, you need to give it an ID
         id: greet

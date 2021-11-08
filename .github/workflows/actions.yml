@@ -7,9 +7,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: List Files
+        # $GITHUB_SHA is the env variable for the commit ID that triggered this workflow
+        # $GITHUB_REPOSITORY is the env variable for the username and repo name
+        # $GITHUB_WORKSPACE is the env variable for the current working directory (same as pwd)
+        # "${{ github.token }}" is Github variable which contains the token you have for your GitHub account, to be able to authenticate to GitHub repos (that you have permissions to). GitHub tokens are alternative to using passwords for authentication to GitHub when using GitHub API or the command line
+        # git clone git@github:$GITHUB_REPOSITORY - this will clone our repo, using the $GITHUB_REPOSITORY environmental variable that contains our repo (username/repo_name)
+        # git checkout $GITHUB_SHA - will checkout the current commit using the env var $GITHUB_SHA (that contains the current commit that triggered the workflow)
         run: |
           pwd
           ls -a
+          echo $GITHUB_SHA 
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+          echo "${{ github.token }}"
+        # We have commented the commands below for now, because they're not 100% complete and were just for demo (for example you still need to add the token in the command to ensure authentication)
+        # git clone git@github:$GITHUB_REPOSITORY
+        # git checkout $GITHUB_SHA
       - name: Checkout
         # This action will authenticate with your repository, fetch your repo code and checkout the commit that triggered this workflow run
         # We need to pull/clone the code of commit that triggered the workflow into the VM where the job is running 

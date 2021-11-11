@@ -5,9 +5,9 @@ jobs:
   functions:
     runs-on: ubuntu-latest
     steps:
-      - name: dump 
       # contains will check if second argument is contained within the first. The output is a boolean. The others are self explanatory
-      # format will replace the index place holders of where the curly brackets are situated with the arguments passed. Hence we get 'Hello World ! !'   
+      # format will replace the index place holders of where the curly brackets are situated with the arguments passed. Hence we get 'Hello World ! !'
+      - name: dump 
         run: |
           echo ${{ contains( 'hello', 'll') }}
           echo ${{ startsWith( 'hello', 'he' ) }}

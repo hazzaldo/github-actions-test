@@ -1,16 +1,46 @@
 name: Matrix
 on: push
 
-jobs: 
+jobs:
   node-version:
     runs-on: ubuntu-latest
+    steps:
+      - name: Log node version 
+        run: node -v
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 6
+      - name: Log node version
+        run: node -v
+  strategy-example:
+    # Inside the "Strategy" we can use different keywords such as "matrix" to specify how many times we want to run a job and with what environments (e.g. versions of Runtimes, OSs ...etc) to run each job.
+    strategy:
+      # The matrix below has 3 OSs and 3 Node-versions specified, meaning our job will run 9 times, each job with a different combination of OS to Node-version. 
+      # Note when we specified the keywords 'os' and 'node-version' under the 'matrix' keyword, these keywords could've been any name. Any keywords under the 'matrix' key can be any key name. 
+      # When we then mention the context matrix in the reserved key in each the job or steps, then GitHub will parse this and understand that this is meant to be for the particular reserved key.
+      # For example 'os' key under 'matrix' could've been any key name, but once we specified 'runs-on: ${{ matrix.os }}' GitHub will understand that because it is specified as a value of 'runs-on' then it's meant to be the OS. 
+      matrix:
+        # this means our job will run every time with a different OS specified below.
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        # this means our job will run every time with a different node-version specified below, i.e. Node versions 6 then 8 then 10 for each of the version of Node  
+        node-version: [6, 8, 10]
+        # fail-fast set to true means, if one of the jobs in the matrix fail, all other jobs will stop running. Otherwise if it's set to false, each of our jobs will run independent of the other jobs. So if one job fails it won't affect the others. 
+      fail-fast: true
+      # max-parallel is where you specify how many of the jobs you're going to run in the Matrix will run in parallel. So value of 0 means no jobs will run in parallel, 2 means 2 will run in parallel ... etc.
+      # If max-parallel is not defined at all, by default GitHub will run all the jobs in parallel. So you can limit the number of parallel jobs using "max-parallel" 
+      max-parallel: 9
+      # Here we use the 'matrix' context inside the Expression double curly brackets followed by 'os'. This will use each of the OS specified in the Matrix in each of the jobs in turn. 
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Log node version 
         run: node -v
       # - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '6'
+          # Here we use the 'matrix' context inside the Expression double curly brackets followed by 'node-version'. This will use each of the node-versions specified in the Matrix in each of the jobs in turn. This is the power of Matrix where you don't repeat/duplicate jobs if you want to run on different environments
+          # Note if you don't use an expression and instead hard-code the node-version (e.g. simply put the value 6), then this will overwrite the node-versions specified in the matrix. Which would make a Matrix pointless.
+          node-version: ${{ matrix.node_version }}
       - name: Log node version
         run: node -v
 
+  

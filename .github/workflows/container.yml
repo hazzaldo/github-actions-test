@@ -1,0 +1,27 @@
+name: Container
+on: push
+
+jobs: 
+  node-docker:
+    runs-on: ubuntu-latest
+    # this is how to specify an image from Docker Hub, in this case it's a node image (version 13.5.0) on a linux alpine image (version 3.10)
+    container: node:13.5.0-alpine3.10
+    # alternatively you can also pass the image and other keys under the 'container' key as objects like so
+    # container:
+      # image: node:13.5.0-alpine3.10
+      # env:
+        # SOME_ENV: ${{ "blah-blah" }}
+        # the port exposed from the container
+      # ports: [6000]
+      # this is volume mapping
+      # volumes: 
+      # this is the extra options to pass to the container
+      # options: --host <host-name>
+    # now any steps will run inside the Container and not the VM (as steps would normally run on the VM)
+    steps:
+      # this should log the node version of the container and not the one installed on the VM (i.e. it should be 13.5.0)
+      - name: Log node version
+      # the 'cat /etc/os-release' prints the content of the file '/etc/os-release' onto the standard output stream, to view the version of the OS this step is running on. This should be the Linux Alpine distro of the container, rather than the VM OS (Ubuntu linux distro)
+        run: |
+          node -v
+          cat /etc/os-release

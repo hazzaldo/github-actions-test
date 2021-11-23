@@ -12,6 +12,7 @@ jobs:
           node-version: 6
       - name: Log node version
         run: node -v
+
   strategy-example:
     # Inside the "Strategy" we can use different keywords such as "matrix" to specify how many times we want to run a job and with what environments (e.g. versions of Runtimes, OSs ...etc) to run each job.
     strategy:
@@ -24,6 +25,22 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
         # this means our job will run every time with a different node-version specified below, i.e. Node versions 6 then 8 then 10 for each of the version of Node  
         node-version: [6, 8, 10]
+        # where you exclude any configuration mentioned in the matrix
+        # note the format is under the 'exclude' key you would start with a dash as you're specifying an array of objects. Where each object in the array represent the combination of matrix configuration that won't run as a job 
+        exclude:
+          - os: ubuntu-latest
+            node_version: 6
+          - os: macos-latest
+            node-version: 8
+        # 'include' key allows us to include a configuration(s) in the matrix but with another configuration not included in the matrix.
+        # This allows extra flexibility, where this extra configuration we don't want to include it in the entire matrix, meaning it will run a job with all the other configurations, but we simply want to include it with just one of the matrix configurations. So it's easier to use 'include' than include it in the matrix and then exclude it from so many jobs 
+        include:
+          - os: ubuntu-latest
+            node-version: 4
+            # what we've done here is declared a new variable, 'is_ubuntu_8', which is a boolean set to true. This means that if the job with the configuration 'os: ubuntu-latest' and 'node-version: 4' runs, this var will be true. 
+            # This comes in handy when we want to run if this job has ran successfully or not, by seeing if this boolean var is showing as 'true' or 'false'.  
+            # We will see how to use this var further down in the code, when this var is accessed via an env var, and then 'echo' the env var to see if it's true or false (i.e. if the job has ran successfully or not)
+            is_ubuntu_8: "true"
         # fail-fast set to true means, if one of the jobs in the matrix fail, all other jobs will stop running. Otherwise if it's set to false, each of our jobs will run independent of the other jobs. So if one job fails it won't affect the others. 
       fail-fast: true
       # max-parallel is where you specify how many of the jobs you're going to run in the Matrix will run in parallel. So value of 0 means no jobs will run in parallel, 2 means 2 will run in parallel ... etc.
@@ -31,6 +48,10 @@ jobs:
       max-parallel: 9
       # Here we use the 'matrix' context inside the Expression double curly brackets followed by 'os'. This will use each of the OS specified in the Matrix in each of the jobs in turn. 
     runs-on: ${{ matrix.os }}
+    # here we now access the 'is_ubuntu_8: "true"' var that we declared earlier, by declaring an env var, 'IS_UBUNTU_8'.
+    # We can use this env var 'IS_UBUNTU_8' to know that our job of configuration 'os: ubuntu-latest' and 'node-version: 4' has ran successfully  
+    env:
+      IS_UBUNTU_8: ${{ matrix.is_ubuntu_8 }}
     steps:
       - name: Log node version 
         run: node -v
@@ -41,6 +62,9 @@ jobs:
           # Note if you don't use an expression and instead hard-code the node-version (e.g. simply put the value 6), then this will overwrite the node-versions specified in the matrix. Which would make a Matrix pointless.
           node-version: ${{ matrix.node_version }}
       - name: Log node version
-        run: node -v
+        # now we output the 'IS_UBUNTU_8' env var, to see if it's true or false - indicating whether our job with configuration 'os: ubuntu-latest' and 'node-version: 4' has ran successfully or not.
+        run: |
+          node -v
+          echo $IS_UBUNTU_8
 
   
